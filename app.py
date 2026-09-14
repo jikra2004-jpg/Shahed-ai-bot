@@ -4,15 +4,18 @@ import requests
 import telebot
 from flask import Flask
 
+# আপনার টেলিগ্রাম বট টোকেন এখানে দিন
 TELEGRAM_BOT_TOKEN = "8983750906:AAFu3_jfQxgMrJr_LGiQLTaOMQYu_3CYzdo"
-GEMINI_API_KEY = "AQ.Ab8RN6KzE7YoNXV1dbtM1rrBL9rzTFhiWVPIc2gHdt-9owQzmg"
+
+# Google AI Studio থেকে আনা একদম নতুন সঠিক এপিআই কি এখানে দিন
+GEMINI_API_KEY = "AQ.Ab8RN6KwSs1nvvD_r6okS40teLGP_0a2QxNiJBhWQ3rcqlWP_A"
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Telegram AI Bot is running smoothly!"
+    return "Telegram AI Bot is running!"
 
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
@@ -29,23 +32,22 @@ def handle_message(message):
         response = requests.post(url, json=payload, headers=headers)
         res_json = response.json()
         
-        # সেফটি চেক: রেসপন্সে candidates আছে কি না তা যাচাই করা
-        if "candidates" in res_json and len(res_json["candidates"]) > 0:
-            candidate = res_json["candidates"][0]
-            if "content" in candidate and "parts" in candidate["content"]:
-                ai_reply = candidate["content"]["parts"][0]["text"]
-                bot.reply_to(message, ai_reply)
-            else:
-                bot.reply_to(message, f"এআই থেকে ফরম্যাট ঠিকমতো আসেনি: {res_json}")
+        if "candidates" in res_json:
+            ai_reply = res_json["candidates"][0]["content"]["parts"][0]["text"]
+            bot.reply_to(message, ai_reply)
         else:
-            # যদি গুগল এপিআই থেকে কোনো এরর দেয় (যেমন কোটা শেষ বা ইনভ্যালিড কি)
-            bot.reply_to(message, f"এপিআই রেসপন্স এরর: {res_json}")
+            bot.reply_to(message, f"এপিআই রেসপন্স সমস্যা: {res_json.get('error', {}).get('message', 'Unknown error')}")
             
     except Exception as e:
-        bot.reply_to(message, f"কোডে সমস্যা হয়েছে: {str(e)}")
+        bot.reply_to(message, f"ত্রুটি: {str(e)}")
 
 def run_telegram_bot():
-    bot.infinity_polling(timeout=10, long_polling_timeout=5)
+    # কনফ্লিক্ট এড়ানোর জন্য আগের সমস্ত ওয়েবহুক রিমूव করে ফ্রেশ পোলিং শুরু করা
+    try:
+        bot.remove_webhook()
+    except:
+        pass
+    bot.infinity_polling(timeout=20, long_polling_timeout=10)
 
 if __name__ == "__main__":
     t = threading.Thread(target=run_telegram_bot)
