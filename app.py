@@ -6,7 +6,7 @@ from flask import Flask
 
 # এখানে সরাসরি আপনার আসল টোকেন এবং এপিআই কি বসিয়ে দিন
 TELEGRAM_BOT_TOKEN = "8983750906:AAEE_sk6GIwhSKC3-Nczyiz90GTnDyNqmno"
-GEMINI_API_KEY = "AQ.Ab8RN6LrGQKZ3rKZ1HQgdtT6ihV8SXr2WpkKm1cfBbCLLQY7Ug"
+GEMINI_API_KEY = "AQ.Ab8RN6KzE7YoNXV1dbtM1rrBL9rzTFhiWVPIc2gHdt-9owQzmg"
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-1.5-flash")
