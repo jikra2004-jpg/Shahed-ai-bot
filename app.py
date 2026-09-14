@@ -5,7 +5,7 @@ import telebot
 from flask import Flask
 
 # ১. আপনার টেলিগ্রাম বট টোকেন দিন
-TELEGRAM_BOT_TOKEN = "8983750906:AAEE_sk6GIwhSKC3-Nczyiz90GTnDyNqmno"
+TELEGRAM_BOT_TOKEN = "8983750906:AAFu3_jfQxgMrJr_LGiQLTaOMQYu_3CYzdo"
 
 # ২. আপনার Google AI Studio থেকে আনা একদম ফ্রেশ জেমিনি এপিআই কি এখানে দিন
 GEMINI_API_KEY = "AQ.Ab8RN6KzE7YoNXV1dbtM1rrBL9rzTFhiWVPIc2gHdt-9owQzmg"
