@@ -4,10 +4,10 @@ import requests
 import telebot
 from flask import Flask
 
-# ১. আপনার নতুন টেলিগ্রাম বট টোকেন এখানে বসান
+# ১. আপনার টেলিগ্রাম বট টোকেন এখানে বসান
 TELEGRAM_BOT_TOKEN = "8843921215:AAHYWadt2eYLsW8rXYNJ3VIxAHYlKKEuLv0"
 
-# ২. আপনার নতুন জেমিনি এপিআই কি এখানে বসান
+# ২. আপনার জেমিনি এপিআই কি এখানে বসান
 GEMINI_API_KEY = "AQ.Ab8RN6LXiVjkjT5jeyhnPs8GAMzNGxZXvJJTCXYiCtNgqtll6A"
 
 bot = telebot.TeleBot(TELEGRAM_BOT_TOKEN)
@@ -17,11 +17,11 @@ app = Flask(__name__)
 def home():
     return "Telegram AI Bot is running smoothly!"
 
-@app.message_handler(func=lambda message: True)
+# এখানে ভুলটি ছিল, app এর পরিবর্তে সঠিকভাবে bot.message_handler ব্যবহার করা হয়েছে
+@bot.message_handler(func=lambda message: True)
 def handle_message(message):
     try:
         user_text = message.text
-        # জেমিনি প্রপার মডেল রুট ব্যবহার করা হলো
         url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key={GEMINI_API_KEY}"
         headers = {'Content-Type': 'application/json'}
         payload = {
@@ -44,7 +44,6 @@ def handle_message(message):
         bot.reply_to(message, f"ত্রুটি: {str(e)}")
 
 def run_telegram_bot():
-    # কনফ্লিক্ট এড়ানোর জন্য পুরোনো ওয়েবহুক ক্লিন করা
     try:
         bot.remove_webhook()
     except:
@@ -58,4 +57,4 @@ if __name__ == "__main__":
 
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-    
+        
